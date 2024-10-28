@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.SalDao">
+
+    <!-- 根据邮箱号查询用户-->
+    <select id="findMySalSql" resultType="com.rlzy.po.Sal">
+        select * from sal
+        <where>
+            <if test="fxrq!=null and fxrq!='' ">
+                and fxrq like '%${fxrq}%'
+            </if>
+            <if test="eno!=null and eno!='' ">
+                and eno =#{eno}
+            </if>
+        </where>
+        ORDER BY id asc limit #{currentPage},#{pageSize}
+    </select>
+    <!--管理员查询数据总数-->
+    <select id="totalCount" resultType="Integer">
+        select count(id)
+        from sal
+    </select>
+
+    <!--员工查询总数-->
+    <select id="totalCountMy" resultType="integer">
+        select  count(eno)
+        from sal
+        where eno = #{eno}
+    </select>
+
+
+    <!-- 新增薪资记录 -->
+    <insert id="addSal" parameterType="com.rlzy.po.Sal">
+        insert into sal(eno, ename, sal, jx, kcsb, kx, totalsal, fxrq)
+        values (#{eno}, #{ename}, #{sal}, #{jx}, #{kcsb}, #{kx}, #{totalsal}, #{fxrq})
+    </insert>
+    <!--  修改员工薪资记录-->
+    <update id="UpdateUserSal" parameterType="com.rlzy.po.Sal">
+        update sal
+        set sal=#{sal},
+            jx=#{jx},
+            kcsb=#{kcsb},
+            kx=#{kx},
+            totalsal=#{totalsal},
+            fxrq=#{fxrq}
+        where id = #{id}
+    </update>
+    <!-- 删除员工薪资记录 -->
+    <delete id="deleteSal" parameterType="Integer">
+        delete
+        from sal
+        where id = #{id}
+    </delete>
+
+    <!-- 导出sal -->
+    <select id="findAllSal" resultType="com.rlzy.po.Sal">
+        select *
+        from sal
+    </select>
+
+    <!-- 根据编号查工资-->
+    <select id="findSalById" parameterType="Integer" resultType="com.rlzy.po.Sal">
+        select *
+        from sal
+        where id = #{id}
+    </select>
+</mapper>

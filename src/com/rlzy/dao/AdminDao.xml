@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.AdminDao" >
+
+    <!--登陆查询-->
+    <select id="findAdmin" parameterType="String" resultType="com.rlzy.po.Admin">
+        select * from admin where email=#{email}
+    </select>
+
+    <!--修改管理员信息-->
+    <update id="updateAdminById" parameterType="com.rlzy.po.Admin">
+        update admin set email=#{email},pwd=#{pwd},nickname=#{nickname} where id =#{id}
+    </update>
+</mapper>

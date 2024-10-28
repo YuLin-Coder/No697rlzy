@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.UserDao">
+    <!-- 根据邮箱号查询用户-->
+    <select id="findUser" parameterType="String" resultType="User">
+        select * from `user` where email =#{email}
+    </select>
+    <!-- 更新员工信息 -->
+    <update id="updateUserInfoSql" parameterType="User">
+        update `user`
+        <set>
+            <if test="eno !=null and eno !=''">
+                eno=#{eno},
+            </if>
+            <if test="realname !=null and realname !=''">
+                realname=#{realname},
+            </if>
+            <if test="pwd !=null and pwd !=''">
+                pwd=#{pwd},
+            </if>
+            <if test="sex !=null and sex !=0">
+                sex=#{sex},
+            </if>
+            <if test="birthday !=null and birthday !=''">
+                birthday=#{birthday},
+            </if>
+            <if test="hiredate !=null and hiredate !=''">
+                hiredate=#{hiredate},
+            </if>
+            <if test="email !=null and email !=''">
+                email=#{email},
+            </if>
+            <if test="address !=null and address !=''">
+                address=#{address},
+            </if>
+            <if test="jg !=null and jg !=''">
+                jg=#{jg},
+            </if>
+            <if test="address !=null and address !=''">
+                address=#{address},
+            </if>
+            <if test="phone !=null and phone !=''">
+                phone=#{phone},
+            </if>
+            <if test="d_id !=null and d_id !=0">
+                d_id=#{d_id},
+            </if>
+            <if test="gwzz!=null and gwzz!=''">
+                gwzz=#{gwzz},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 根据邮箱号查询用户-->
+    <select id="findAllUserSql" resultType="com.rlzy.po.User">
+        select * from `user`
+        <where>
+            <if test="realname!=null and realname!='' ">
+                and realname like '%${realname}%'
+            </if>
+        </where>
+        ORDER BY id asc limit #{currentPage},#{pageSize}
+    </select>
+    <!--查询数据总数-->
+    <select id="totalCount" resultType="Integer">
+        select count(id) from `user`
+    </select>
+    <!-- 导出用户 -->
+    <select id="getAllUser" resultType="User">
+        select * from user
+    </select>
+    <!-- 新增员工 -->
+    <insert id="addUser" parameterType="User">
+        insert into `user`(eno,realname,pwd,sex,birthday,hiredate,email,address,jg,phone,d_id,gwzz)
+        values (#{eno},#{realname},#{pwd},#{sex},#{birthday},#{hiredate},#{email},#{address},#{jg},#{phone},#{d_id},#{gwzz})
+    </insert>
+    <!-- 修改员工 -->
+    <update id="updateUser" parameterType="User">
+        update `user` set realname=#{realname},pwd=#{pwd},sex=#{sex},birthday=#{birthday},email=#{email},address=#{address},jg=#{jg},phone=#{phone},gwzz=#{gwzz}
+        where id=#{id}
+    </update>
+    <!-- 根据id查找用户 -->
+    <select id="findUserById" parameterType="Integer" resultType="User">
+        select * from `user` where id =#{id}
+    </select>
+    <!-- 删除用户 -->
+    <delete id="deleteUserByid" parameterType="Integer">
+        delete from `user` where id=#{id}
+    </delete>
+
+    <!-- 根据部门查询所有员工-->
+    <select id="FindUserByDept" parameterType="Integer" resultType="User">
+        select * from  `user` where d_id=#{Did}
+    </select>
+</mapper>

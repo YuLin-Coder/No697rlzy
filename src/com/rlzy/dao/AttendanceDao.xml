@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.AttendanceDao" >
+
+    <!-- 新增员工考勤记录 -->
+    <insert id="addAttendanceSql" parameterType="com.rlzy.po.Attendance">
+        insert into attendance(eno,ename,weekday,status,qdsj) values (#{eno},#{ename},#{weekday},#{status},#{qdsj})
+    </insert>
+
+    <!--查询数据总数-->
+    <select id="totalCount"  resultType="Integer">
+        select count(id) from attendance
+    </select>
+
+    <!-- 根据邮箱号查询用户-->
+    <select id="findAllUserSql"  resultType="com.rlzy.po.Attendance">
+        select * from `attendance` ORDER BY id asc limit #{currentPage},#{pageSize}
+    </select>
+
+    <!-- 更新用户考勤信息 -->
+    <update id="updateUserAttendance" parameterType="com.rlzy.po.Attendance">
+        update `attendance` set weekday=#{weekday},status=#{status},qdsj=#{qdsj} where id=#{id}
+    </update>
+
+    <!-- 删除考勤 -->
+    <delete id="deleteAttendanceById" parameterType="Integer">
+        delete from `attendance` where id=#{id}
+    </delete>
+
+    <!-- 根据id查询考勤 -->
+    <select id="findAttendanceById" parameterType="Integer" resultType="com.rlzy.po.Attendance">
+        select * from attendance where id=#{id}
+    </select>
+
+    <!-- 导出 -->
+    <select id="findAllAttendance" resultType="com.rlzy.po.Attendance">
+        select * from attendance
+    </select>
+
+     <!--根据自己eno查考勤记录-->
+    <select id="FindMyAttendance" resultType="com.rlzy.po.Attendance">
+        select * from  `attendance` where eno=#{eno} ORDER BY id desc limit 7
+    </select>
+
+    <!--员工查询总数-->
+    <select id="totalCountMy" resultType="integer">
+        select  count(eno)
+        from attendance
+        where eno = #{eno}
+    </select>
+</mapper>

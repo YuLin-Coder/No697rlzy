@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.LeaveDao" >
+
+
+    <select id="findAllLeave" resultType="com.rlzy.po.Leave">
+        select le.* ,
+        le.start_date  as startDate,
+        le.end_date  as endDate,
+        le.create_time  as createTime,
+        u.realname  as ename
+        from  `leave` le
+        left join  `user` u
+        on le.eno = u.eno
+        <where>
+            <if test="eno !=null and eno !=''">
+                and le.eno=#{eno}
+            </if>
+            <if test="reason !=null and reason !=''">
+                and le.reason like concat('%',#{reason},'%')
+            </if>
+        </where>
+        limit #{startIndex},#{pageSize}
+    </select>
+
+
+    <select id="findAdminAllLeave" resultType="com.rlzy.po.Leave">
+        select le.* ,
+        le.start_date  as startDate,
+        le.end_date  as endDate,
+        le.create_time  as createTime,
+        u.realname as ename
+        from  `leave` le
+        left join  `user` u
+        on le.eno = u.eno
+        <where>
+            <if test="reason !=null and reason !=''">
+                and le.reason like concat('%',#{reason},'%')
+            </if>
+        </where>
+        limit #{startIndex},#{pageSize}
+    </select>
+    <insert id="addLeave">
+       insert into   `leave` (eno,reason,start_date,end_date,status,create_time)
+       values (#{eno},#{reason},#{startDate,jdbcType=TIMESTAMP},#{endDate,jdbcType=TIMESTAMP},#{status},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <delete id="deleteLeave">
+        delete from `leave` where id = #{leaveId}
+    </delete>
+    <select id="findLeaveById" resultType="com.rlzy.po.Leave">
+        select le.* ,u.realname as ename,
+               le.start_date  as startDate,
+               le.end_date  as endDate,
+               le.create_time  as createTime
+        from  `leave` le
+        left join  `user` u
+              on le.eno = u.eno
+        where le.id = #{leaveId}
+    </select>
+    <update id="updateLeave">
+      update `leave`
+      set eno =#{eno} ,
+          reason =#{reason} ,
+          start_date =#{startDate} ,
+          end_date =#{endDate} ,
+          status = #{status}
+      where id = #{id}
+    </update>
+    <update id="updateLeaveStatus">
+        update `leave`
+        set status = #{status}
+        where id = #{leaveId}
+    </update>
+    <select id="findAllLeaveCount" resultType="int">
+        select count(*)
+        from  `leave` le
+        left join  `user` u
+        on le.eno = u.eno
+        <where>
+            <if test="eno !=null and eno !=''">
+                and le.eno=#{eno}
+            </if>
+            <if test="reason !=null and reason !=''">
+                and le.reason like concat('%',#{reason},'%')
+            </if>
+        </where>
+    </select>
+    <select id="findAdminAllLeaveCount" resultType="int">
+        select count(*)
+        from  `leave` le
+        left join  `user` u
+        on le.eno = u.eno
+        <where>
+            <if test="reason !=null and reason !=''">
+                and le.reason like concat('%',#{reason},'%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

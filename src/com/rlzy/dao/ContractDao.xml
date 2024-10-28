@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.ContractDao" >
+
+
+    <select id="findAllContractCount" resultType="int">
+
+      select count(*)
+        from `contract` c
+        left join  `user` u
+        on c.eno = u.eno
+        <where>
+            <if test="eno !=null and eno !=''">
+                and c.eno=#{eno}
+            </if>
+            <if test="note !=null and note !=''">
+                and c.note like concat('%',#{note},'%')
+            </if>
+        </where>
+    </select>
+    <select id="findAllContract" resultType="com.rlzy.po.Contract">
+        select c.*,
+        c.hire_date  as hireDate,
+        c.create_time  as createTime,
+        u.realname as ename
+        from `contract` c
+        left join  `user` u
+        on c.eno = u.eno
+        <where>
+            <if test="eno !=null and eno !=''">
+                and c.eno=#{eno}
+            </if>
+            <if test="note !=null and note !=''">
+                and c.note like concat('%',#{note},'%')
+            </if>
+        </where>
+        limit #{startIndex},#{pageSize}
+    </select>
+
+    <select id="findAdminAllContractCount" resultType="int">
+        select count(*)
+        from `contract` c
+        left join  `user` u
+        on c.eno = u.eno
+        <where>
+            <if test="note !=null and note !=''">
+                and c.note like concat('%',#{note},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="findAdminAllContract" resultType="com.rlzy.po.Contract">
+        select c.*,
+        c.hire_date  as hireDate,
+        c.create_time  as createTime,
+        u.realname as ename
+        from `contract` c
+        left join  `user` u
+        on c.eno = u.eno
+        <where>
+            <if test="note !=null and note !=''">
+                and c.note like concat('%',#{note},'%')
+            </if>
+        </where>
+        limit #{startIndex},#{pageSize}
+    </select>
+    <insert id="addContract">
+        insert into   `contract` (eno,salary,hire_date,note,file,create_time)
+        values (#{eno},#{salary},#{hireDate,jdbcType=TIMESTAMP},#{note},#{file},#{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <delete id="deleteContract">
+        delete from `contract`
+        where  id = #{contractId}
+    </delete>
+    <select id="findContractById" resultType="com.rlzy.po.Contract">
+        select c.*,
+               c.hire_date  as hireDate,
+               c.create_time  as createTime,
+               u.realname as ename
+        from `contract` c
+                 left join  `user` u
+                     on c.eno = u.eno
+        where c.id = #{contractId}
+    </select>
+    <update id="updateContract">
+        update `contract`
+        set eno =#{eno} ,
+            salary =#{salary} ,
+            hire_date =#{hireDate} ,
+            note =#{note} ,
+            file = #{file}
+        where id = #{id}
+    </update>
+</mapper>

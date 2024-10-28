@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.DeptDao" >
+    <!-- 根据邮箱号查询用户-->
+    <select id="findAllDeptSql"  resultType="com.rlzy.po.Dept">
+        select * from dept
+        <where>
+            <if test="dname!=null and dname!='' ">
+                and  dname like  '%${dname}%'
+            </if>
+        </where>
+        ORDER BY id asc limit #{currentPage},#{pageSize}
+    </select>
+    <!--查询数据总数-->
+    <select id="totalCount"  resultType="Integer">
+        select count(id) from dept
+    </select>
+    <!-- 根据id查找部门 -->
+    <select id="findDeptById" parameterType="Integer" resultType="com.rlzy.po.Dept">
+        select * from dept where id =#{d_id}
+    </select>
+
+    <!-- 查找所有部门 -->
+    <select id="findAllDept"  resultType="com.rlzy.po.Dept">
+        select * from dept
+    </select>
+
+    <!-- 新增部门 -->
+    <insert id="addDept" parameterType="com.rlzy.po.Dept">
+        insert into dept(dname) values (#{dname})
+    </insert>
+
+    <!-- 删除部门 -->
+    <delete id="deleteDept" parameterType="Integer">
+        delete from dept where id =#{dept_id}
+    </delete>
+
+    <!-- 修改部门 -->
+    <update id="updateDept" parameterType="com.rlzy.po.Dept">
+        update dept set dname=#{dname} where id=#{id}
+    </update>
+</mapper>

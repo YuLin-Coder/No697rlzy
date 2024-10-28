@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rlzy.dao.BoardDao" >
+    <!--  查询全部公告 根据标题查询公告  -->
+    <select id="findAllBoardSql"  resultType="com.rlzy.po.Board">
+        select * from board
+        <where>
+            <if test="title!=null and title!='' ">
+                and  title like  '%${title}%'
+            </if>
+        </where>
+        ORDER BY id asc limit #{currentPage},#{pageSize}
+    </select>
+    <!--查询数据总数-->
+    <select id="totalCount"  resultType="Integer">
+        select count(id) from board
+    </select>
+    <!-- 新增公告 -->
+    <insert id="adminAddBoard" parameterType="com.rlzy.po.Board">
+        insert into board(title,content,fbsj) values (#{title},#{content},#{fbsj})
+    </insert>
+    <!-- 删除公告 -->
+    <delete id="adminDeleteBoard" parameterType="Integer">
+        delete from board where id=#{id}
+    </delete>
+    <!-- 根据id查询公告 -->
+    <select id="findBoardById" parameterType="Integer" resultType="com.rlzy.po.Board">
+        select * from board where id=#{id}
+    </select>
+    <!-- 更新公告 -->
+    <update id="updateBoard" parameterType="com.rlzy.po.Board">
+        update board set title=#{title},content=#{content} where id=#{id}
+    </update>
+</mapper>
